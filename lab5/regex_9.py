@@ -13,3 +13,5 @@ for string in lines:
             new_string += string[i]
     new_string += string[len(string) - 1]
     print(new_string)
+
+
