@@ -24,7 +24,7 @@ date = datetime.now()
 sec = int(date.strftime("%S"))
 min = int(date.strftime("%M"))
 
-angle_sec = -3 -sec*6
+angle_sec = -4 -sec*6
 angle_min = -54 -min*6
 
 gameOn = True
