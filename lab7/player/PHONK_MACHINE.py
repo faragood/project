@@ -1,4 +1,4 @@
-#import all libraries and init them
+        #import all libraries and init them
 import pygame
 import os
 from pygame import mixer
