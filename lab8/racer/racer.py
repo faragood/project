@@ -31,12 +31,12 @@ def loss(xx, yy, font, roads):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit() #quit the game
+                exit() #quit the game
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     game(xx, yy, font, roads) #start new game
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit() #quit the game
+                    exit() #quit the game
         pygame.time.delay(50) #wait for 50ms
 
 #funtion for game   
@@ -128,7 +128,7 @@ def game(xx, yy, font, roads):
         for event in pygame.event.get():
             #quit the game 
             if event.type == pygame.QUIT:
-                pygame.quit()
+                exit()
             #check for KEYDOWN events
             elif event.type == pygame.KEYDOWN:
                 #start to move player car right if 'RIGHT' or 'd' was pressed down
@@ -139,7 +139,7 @@ def game(xx, yy, font, roads):
                     left_move = True
                 #quit the game 
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
+                    exit()
             #check for KEYUP events
             elif event.type == pygame.KEYUP:
                 #stop to move player car right if 'RIGHT' or 'd' was pressed up
@@ -215,8 +215,6 @@ def game(xx, yy, font, roads):
             else:
                 coins.append([random_coin(roads), -200]) #add new coin
             enemy_tick = 0 #set enemy tick to 0ms 
-            print(speed)
-            print(appear_rand_time_range)
         else:
             enemy_tick+= 10 #add 10ms to enemy_tick
         
