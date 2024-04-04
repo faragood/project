@@ -72,6 +72,22 @@ rectangle_0 = pygame.image.load("png/rectangle.png")
 rectangle_0 = pygame.transform.scale(rectangle_0, (30, 30))
 rectangle_0_rect = rectangle_0.get_rect(topleft = (hotbar_x//3*2 - rectangle_0.get_size()[0]//2, 695))
 
+#load square and set its size
+square_0 = pygame.image.load("png/square.png")
+square_0 = pygame.transform.scale(square_0, (30, 30))
+square_0_rect = square_0.get_rect(topleft = (hotbar_x//3 - rectangle_0.get_size()[0]//2, 695+45))
+
+#load right triangle and set its size
+right_triangle = pygame.image.load("png/right_triangle.png")
+right_triangle = pygame.transform.scale(right_triangle, (30, 30))
+right_triangle_rect = right_triangle.get_rect(topleft = (hotbar_x//3*2 - right_triangle.get_size()[0]//2, 695+45))
+
+#load equilateral triangle and set its size
+equilateral_triangle = pygame.image.load("png/equilateral_triangle.png")
+equilateral_triangle = pygame.transform.scale(equilateral_triangle, (30, 30))
+equilateral_triangle_rect = equilateral_triangle.get_rect(topleft = (hotbar_x//3 - equilateral_triangle.get_size()[0]//2, 695+45*2))
+
+
 #function draw size change buttons
 def size_change_button(text, x_pos, y_pos, hotbar_x, font):
     size_change_text = font.render(text, True, (50, 50, 50))
@@ -114,7 +130,7 @@ def delfiles(start):
             file_number+=1
     for i in range(start, file_number+1):
         os.remove(os.path.join(folder_path, "screenshot" + str(i) + ".png"))
-delfiles(1) #delete all screenshots
+delfiles(2) #delete all screenshots
     
 #function makes screenshot
 def screenshot(screenshot_num, screenshot_cur):
@@ -178,7 +194,7 @@ while running:
                     #set mode based on tool number
                     if tool == 0 or tool == 1:
                         draw = True
-                    elif tool == 2 or tool == 3:
+                    else:
                         shapes_draw = True
                         shapes_initial_coor = pygame.mouse.get_pos()
                     screenshot(screenshot_number, screenshot_curr) #make screenshot
@@ -244,7 +260,7 @@ while running:
             size_change_button_check(+5, 2, 600, hotbar_x)
 
             #check if user clicked at tool selection button
-            for i in range(0, 4):
+            for i in range(0, 8):
                 if tool_button_check(i, hotbar_x):
                     tool = i
 
@@ -266,16 +282,30 @@ while running:
 
         if tool == 2: #if user have chosen 'circle' tool, then draw circle
             pygame.draw.circle(screen, color, shapes_initial_coor, ((shapes_initial_coor[0] - pygame.mouse.get_pos()[0])**2 + (shapes_initial_coor[1] - pygame.mouse.get_pos()[1])**2)**(1/2))
-        elif tool == 3: #if user have chosen 'rectangle' tool, then draw rectangle
+        elif tool == 3 or tool == 4: #if user have chosen 'rectangle' tool, then draw rectangle
+            a_side = 0
+            b_side = 0
+            if tool == 3:
+                a_side = abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0])
+                b_side = abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])
+            elif tool == 4:
+                a_side = max(abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1]))
+                b_side = a_side
             if pygame.mouse.get_pos()[0] >= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] >= shapes_initial_coor[1]:
-                pygame.draw.rect(screen, color, pygame.Rect(shapes_initial_coor[0], shapes_initial_coor[1], abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])))
-            elif pygame.mouse.get_pos()[0] <= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] >= shapes_initial_coor[1]:
-                pygame.draw.rect(screen, color, pygame.Rect(pygame.mouse.get_pos()[0], shapes_initial_coor[1], abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])))
-            elif pygame.mouse.get_pos()[0] <= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] <= shapes_initial_coor[1]:
-                pygame.draw.rect(screen, color, pygame.Rect(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])))
-            elif pygame.mouse.get_pos()[0] >= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] <= shapes_initial_coor[1]:
-                pygame.draw.rect(screen, color, pygame.Rect(shapes_initial_coor[0], pygame.mouse.get_pos()[1], abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])))
-    
+                pygame.draw.rect(screen, color, pygame.Rect(shapes_initial_coor[0], shapes_initial_coor[1], a_side, b_side))
+            elif pygame.mouse.get_pos()[0] <= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] >= shapes_initial_coor[1] and tool == 3:
+                pygame.draw.rect(screen, color, pygame.Rect(pygame.mouse.get_pos()[0], shapes_initial_coor[1], a_side, b_side))
+            elif pygame.mouse.get_pos()[0] <= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] <= shapes_initial_coor[1]  and tool == 3:
+                pygame.draw.rect(screen, color, pygame.Rect(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], a_side, b_side))
+            elif pygame.mouse.get_pos()[0] >= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] <= shapes_initial_coor[1]  and tool == 3:
+                pygame.draw.rect(screen, color, pygame.Rect(shapes_initial_coor[0], pygame.mouse.get_pos()[1], a_side, b_side))
+        elif tool == 5:
+            pygame.draw.polygon(screen, color, [shapes_initial_coor, pygame.mouse.get_pos(), (shapes_initial_coor[0], pygame.mouse.get_pos()[1])], 0)
+        elif tool == 6:
+            if shapes_initial_coor[1] < pygame.mouse.get_pos()[1]:
+                pygame.draw.polygon(screen, color, [shapes_initial_coor, (pygame.mouse.get_pos()[0], shapes_initial_coor[1]), (0.5*(shapes_initial_coor[0] + pygame.mouse.get_pos()[0]), shapes_initial_coor[1] + abs(pygame.mouse.get_pos()[0] - shapes_initial_coor[0])*(3**(1/2))/2)], 0)
+            else:
+                pygame.draw.polygon(screen, color, [shapes_initial_coor, (pygame.mouse.get_pos()[0], shapes_initial_coor[1]), (0.5*(shapes_initial_coor[0] + pygame.mouse.get_pos()[0]), shapes_initial_coor[1] - abs(pygame.mouse.get_pos()[0] - shapes_initial_coor[0])*(3**(1/2))/2)], 0)
     if draw: #if user have chosen 'draw' tool, then draw
         current_coor = pygame.mouse.get_pos() #set new position for current_coor
         if current_coor == prev_сoor: #if current position if equal to previous, then draw circle in this coordinates
@@ -336,6 +366,9 @@ while running:
     screen.blit(eraser, eraser_rect)
     screen.blit(circle_0, circle_0_rect)
     screen.blit(rectangle_0, rectangle_0_rect)
+    screen.blit(square_0, square_0_rect)
+    screen.blit(right_triangle, right_triangle_rect)
+    screen.blit(equilateral_triangle, equilateral_triangle_rect)
 
     pygame.display.flip() #update screen
 
