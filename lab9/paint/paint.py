@@ -87,6 +87,11 @@ equilateral_triangle = pygame.image.load("png/equilateral_triangle.png")
 equilateral_triangle = pygame.transform.scale(equilateral_triangle, (30, 30))
 equilateral_triangle_rect = equilateral_triangle.get_rect(topleft = (hotbar_x//3 - equilateral_triangle.get_size()[0]//2, 695+45*2))
 
+#load rhombus and set its size
+rhombus = pygame.image.load("png/rhombus.png")
+rhombus = pygame.transform.scale(rhombus, (30, 30))
+rhombus_rect = rhombus.get_rect(topleft = (hotbar_x//3*2 - rhombus.get_size()[0]//2, 695+45*2))
+
 
 #function draw size change buttons
 def size_change_button(text, x_pos, y_pos, hotbar_x, font):
@@ -282,13 +287,13 @@ while running:
 
         if tool == 2: #if user have chosen 'circle' tool, then draw circle
             pygame.draw.circle(screen, color, shapes_initial_coor, ((shapes_initial_coor[0] - pygame.mouse.get_pos()[0])**2 + (shapes_initial_coor[1] - pygame.mouse.get_pos()[1])**2)**(1/2))
-        elif tool == 3 or tool == 4: #if user have chosen 'rectangle' tool, then draw rectangle
+        elif tool == 3 or tool == 4: #if user have chosen 'rectangle' or 'square' tool, then draw rectangle or square
             a_side = 0
             b_side = 0
-            if tool == 3:
+            if tool == 3: #if user have chosen 'rectangle' tool, then make a, b sides
                 a_side = abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0])
                 b_side = abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1])
-            elif tool == 4:
+            elif tool == 4: #if user have chosen 'square' tool, then make a = b = max(a, b)
                 a_side = max(abs(pygame.mouse.get_pos()[0]-shapes_initial_coor[0]), abs(pygame.mouse.get_pos()[1]-shapes_initial_coor[1]))
                 b_side = a_side
             if pygame.mouse.get_pos()[0] >= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] >= shapes_initial_coor[1]:
@@ -299,13 +304,16 @@ while running:
                 pygame.draw.rect(screen, color, pygame.Rect(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], a_side, b_side))
             elif pygame.mouse.get_pos()[0] >= shapes_initial_coor[0] and pygame.mouse.get_pos()[1] <= shapes_initial_coor[1]  and tool == 3:
                 pygame.draw.rect(screen, color, pygame.Rect(shapes_initial_coor[0], pygame.mouse.get_pos()[1], a_side, b_side))
-        elif tool == 5:
+        elif tool == 5: #if user have chosen 'right triangle' tool, then draw right triangle
             pygame.draw.polygon(screen, color, [shapes_initial_coor, pygame.mouse.get_pos(), (shapes_initial_coor[0], pygame.mouse.get_pos()[1])], 0)
-        elif tool == 6:
+        elif tool == 6: #if user have chosen 'equilateral triangle' tool, then draw equilateral triangle
             if shapes_initial_coor[1] < pygame.mouse.get_pos()[1]:
                 pygame.draw.polygon(screen, color, [shapes_initial_coor, (pygame.mouse.get_pos()[0], shapes_initial_coor[1]), (0.5*(shapes_initial_coor[0] + pygame.mouse.get_pos()[0]), shapes_initial_coor[1] + abs(pygame.mouse.get_pos()[0] - shapes_initial_coor[0])*(3**(1/2))/2)], 0)
             else:
                 pygame.draw.polygon(screen, color, [shapes_initial_coor, (pygame.mouse.get_pos()[0], shapes_initial_coor[1]), (0.5*(shapes_initial_coor[0] + pygame.mouse.get_pos()[0]), shapes_initial_coor[1] - abs(pygame.mouse.get_pos()[0] - shapes_initial_coor[0])*(3**(1/2))/2)], 0)
+        elif tool == 7: #if user have chosen 'rhombus' tool, then draw rhombus
+                pygame.draw.polygon(screen, color, [((shapes_initial_coor[0] + pygame.mouse.get_pos()[0])*0.5, shapes_initial_coor[1]), ((shapes_initial_coor[0] + pygame.mouse.get_pos()[0])*0.5, pygame.mouse.get_pos()[1]), (shapes_initial_coor[0], (shapes_initial_coor[1] + pygame.mouse.get_pos()[1])*0.5)], 0)
+                pygame.draw.polygon(screen, color, [((shapes_initial_coor[0] + pygame.mouse.get_pos()[0])*0.5, shapes_initial_coor[1]), ((shapes_initial_coor[0] + pygame.mouse.get_pos()[0])*0.5, pygame.mouse.get_pos()[1]), (pygame.mouse.get_pos()[0], (shapes_initial_coor[1] + pygame.mouse.get_pos()[1])*0.5)], 0)
     if draw: #if user have chosen 'draw' tool, then draw
         current_coor = pygame.mouse.get_pos() #set new position for current_coor
         if current_coor == prev_сoor: #if current position if equal to previous, then draw circle in this coordinates
@@ -369,6 +377,7 @@ while running:
     screen.blit(square_0, square_0_rect)
     screen.blit(right_triangle, right_triangle_rect)
     screen.blit(equilateral_triangle, equilateral_triangle_rect)
+    screen.blit(rhombus, rhombus_rect)
 
     pygame.display.flip() #update screen
 
